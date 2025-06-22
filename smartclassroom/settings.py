@@ -97,7 +97,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'Smart_classroom',
         'USER': 'srp1',
-        'PASSWORD': 'srp@1',
+        'PASSWORD': '',
         'HOST': 'localhost',  # Change if using a remote database
         'PORT': '5432',  # Default PostgreSQL port
     }
@@ -107,7 +107,7 @@ DATABASES = {
 #         'ENGINE': 'django.db.backends.postgresql',
 #         'NAME': 'Smart_classroom',           # Your database name
 #         'USER': 'postgres',         # Your PostgreSQL user
-#         'PASSWORD': 'Chiku@1234', # Your PostgreSQL password
+#         'PASSWORD': '', # Your PostgreSQL password
 #         'HOST': 'localhost',      # or your specific host address
 #         'PORT': '5432',           # default PostgreSQL port
 #     }
