@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Submit Assignment - Smart Classroom System</title>
+  <!-- Google Fonts -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,700">
+  <!-- Font Awesome for Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+  <style>
+    /* Reset / Global Styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: #f4f4f4;
+      color: #333;
+      overflow-x: hidden;
+    }
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+    ul {
+      list-style: none;
+    }
+    /* HEADER with animated gradient */
+    header {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      height: 80px;
+      background: linear-gradient(45deg, #6a11cb, #2575fc, #6a11cb);
+      background-size: 200% 200%;
+      animation: gradientBG 8s ease infinite;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 30px;
+      color: #fff;
+      z-index: 1100;
+    }
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    header h1 {
+      font-size: 26px;
+    }
+    /* Header Navigation and Dropdown */
+    .nav-menu ul {
+      display: flex;
+      align-items: center;
+    }
+    .nav-menu ul li {
+      margin: 0 15px;
+      position: relative;
+    }
+    .nav-menu ul li a {
+      font-size: 16px;
+      padding: 8px;
+      transition: color 0.3s;
+    }
+    .nav-menu ul li a:hover {
+      color: #ffeb3b;
+    }
+    /* Dropdown styles */
+    .dropdown .dropbtn {
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+    }
+    .dropdown .fa-caret-down {
+      margin-left: 5px;
+    }
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      min-width: 150px;
+      background: #fff;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+      z-index: 1000;
+    }
+    .dropdown-content a {
+      display: block;
+      padding: 10px 15px;
+      color: #333;
+      transition: background 0.3s;
+    }
+    .dropdown-content a:hover {
+      background: #f0f0f0;
+    }
+    .dropdown:hover .dropdown-content {
+      display: block;
+    }
+    
+    /* MAIN LAYOUT */
+    .container {
+      display: flex;
+      margin-top: 80px; /* space for fixed header */
+      height: calc(100vh - 80px);
+      position: relative;
+      transition: all 0.3s ease;
+    }
+    /* SIDEBAR */
+    .sidebar {
+      width: 250px;
+      background: #fff;
+      border-right: 1px solid #ddd;
+      padding: 20px;
+      overflow-y: auto;
+      transition: transform 0.3s ease;
+    }
+    .container.collapsed .sidebar {
+      transform: translateX(-260px);
+    }
+    .sidebar nav ul li {
+      margin: 15px 0;
+    }
+    .sidebar nav ul li a {
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      padding: 8px;
+      color: #333;
+      transition: background 0.3s, padding-left 0.3s;
+      border-radius: 4px;
+    }
+    .sidebar nav ul li a:hover {
+      background: #f0f0f0;
+      padding-left: 15px;
+    }
+    .sidebar nav ul li a i {
+      margin-right: 10px;
+      color: #2575fc;
+    }
+    
+    /* Sidebar Toggle Button */
+    .sidebar-toggle {
+      position: absolute;
+      top: 20px;
+      left: 250px;
+      width: 30px;
+      height: 30px;
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: left 0.3s ease;
+      z-index: 1200;
+    }
+    .container.collapsed .sidebar-toggle {
+      left: 10px;
+    }
+    
+    /* MAIN CONTENT AREA (Assignment Submission) */
+    .main-content {
+      flex: 1;
+      padding: 30px 40px;
+      overflow-y: auto;
+      position: relative;
+      animation: fadeIn 1s ease-in;
+      transition: margin-left 0.3s ease;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .page-title {
+      font-size: 32px;
+      margin-bottom: 20px;
+    }
+    .instructions {
+      font-size: 16px;
+      color: #666;
+      margin-bottom: 30px;
+    }
+    
+    /* File Upload Area for Assignment Submission */
+    .submission-form {
+      border: 2px dashed #2575fc;
+      border-radius: 8px;
+      padding: 30px;
+      text-align: center;
+      background: #f9f9f9;
+      margin-bottom: 30px;
+      transition: background 0.3s;
+      cursor: pointer;
+      position: relative;
+    }
+    .submission-form:hover {
+      background: #eaf4fb;
+    }
+    .submission-form p {
+      font-size: 16px;
+      color: #555;
+    }
+    .submission-form input[type="file"] {
+      display: none;
+    }
+    #fileError {
+      display: block;
+      margin-top: 10px;
+      color: red;
+      font-size: 14px;
+    }
+    
+    /* Submit Button */
+    .submit-btn {
+      display: inline-block;
+      padding: 10px 15px;
+      background: #2575fc;
+      color: #fff;
+      font-size: 16px;
+      border-radius: 4px;
+      transition: background 0.3s;
+      border: none;
+      cursor: pointer;
+    }
+    .submit-btn:hover {
+      background: #1a5bb8;
+    }
+    
+    /* FOOTER */
+    footer {
+      background: #fff;
+      text-align: center;
+      padding: 15px;
+      border-top: 1px solid #ddd;
+    }
+    
+    /* Responsive Adjustments */
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column;
+      }
+      .sidebar {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid #ddd;
+        transform: translateX(0);
+      }
+      .sidebar-toggle {
+        display: none;
+      }
+      .main-content {
+        padding: 15px 20px;
+      }
+      .nav-menu ul {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- HEADER -->
+  <header>
+    <h1>Smart Classroom System</h1>
+    <nav class="nav-menu">
+      <ul>
+        <li><a href="#">Dashboard</a></li>
+        <li><a href="#">Courses</a></li>
+        <li><a href="#">Announcements</a></li>
+        <li class="dropdown">
+          <a href="#" class="dropbtn">Profile <i class="fa fa-caret-down"></i></a>
+          <div class="dropdown-content">
+            <a href="#">View Profile</a>
+            <a href="#">Settings</a>
+            <a href="#">Logout</a>
+          </div>
+        </li>
+      </ul>
+    </nav>
+  </header>
+  
+  <!-- MAIN LAYOUT -->
+  <div class="container" id="container">
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+      <nav>
+        <ul>
+          <li><a href="#"><i class="fa fa-tachometer-alt"></i> Dashboard</a></li>
+          <li><a href="#"><i class="fa fa-book"></i> My Courses</a></li>
+          <li><a href="#"><i class="fa fa-calendar"></i> Schedule</a></li>
+          <li><a href="#"><i class="fa fa-tasks"></i> Assignments</a></li>
+          <li><a href="#"><i class="fa fa-pencil-alt"></i> Exams</a></li>
+          <li><a href="#"><i class="fa fa-folder-open"></i> Resources</a></li>
+          <li><a href="#"><i class="fa fa-cog"></i> Settings</a></li>
+          <li><a href="#"><i class="fa fa-sign-out-alt"></i> Logout</a></li>
+        </ul>
+      </nav>
+    </aside>
+    
+    <!-- Animated Sidebar Toggle Button -->
+    <div class="sidebar-toggle" id="sidebarToggle" onclick="toggleSidebar()">
+      <i class="fa fa-angle-double-left"></i>
+    </div>
+    
+    <!-- MAIN CONTENT: Assignment Submission -->
+    <main class="main-content">
+      <div class="page-title">Submit Assignment</div>
+      <p class="instructions">
+        Please upload your assignment in PDF format. The maximum allowed file size is 1MB.
+      </p>
+      <!-- File Upload Area -->
+      <div class="submission-form" id="submissionForm">
+        <input type="file" id="pdfInput" accept="application/pdf" />
+        <p id="uploadText">Drag & drop your PDF here or click to select a file</p>
+        <span id="fileError"></span>
+      </div>
+      <!-- Submit Button -->
+      <button class="submit-btn" id="submitAssignmentBtn">Submit Assignment</button>
+    </main>
+  </div>
+  
+  <!-- FOOTER -->
+  <footer>
+    &copy; 2025 Smart Classroom System. All Rights Reserved.
+  </footer>
+  
+  <script>
+    // Retrieve username from localStorage, if available (default to "Student")
+    const username = localStorage.getItem('username') || 'Student';
+    // (For demonstration, you can display or use this value on the page.)
+    
+    // Sidebar toggle functionality
+    function toggleSidebar() {
+      const container = document.getElementById('container');
+      container.classList.toggle('collapsed');
+      const toggleIcon = document.getElementById('sidebarToggle').querySelector('i');
+      if (container.classList.contains('collapsed')) {
+        toggleIcon.classList.remove('fa-angle-double-left');
+        toggleIcon.classList.add('fa-angle-double-right');
+      } else {
+        toggleIcon.classList.remove('fa-angle-double-right');
+        toggleIcon.classList.add('fa-angle-double-left');
+      }
+    }
+    
+    // File upload functionality with drag & drop support
+    const pdfInput = document.getElementById('pdfInput');
+    const submissionForm = document.getElementById('submissionForm');
+    const fileError = document.getElementById('fileError');
+    const uploadText = document.getElementById('uploadText');
+    const MAX_FILE_SIZE = 1048576; // 1MB in bytes
+
+    // Trigger file selection when clicking on the upload area
+    submissionForm.addEventListener('click', () => {
+      pdfInput.click();
+    });
+
+    // Validate file when selected via file dialog
+    pdfInput.addEventListener('change', (e) => {
+      fileError.textContent = ''; // Clear previous errors
+      const file = e.target.files[0];
+      if (file) {
+        if (file.size > MAX_FILE_SIZE) {
+          fileError.textContent = 'File size exceeds the 1MB limit. Please choose a smaller file.';
+          pdfInput.value = ''; // Reset the input
+        } else if (file.type !== 'application/pdf') {
+          fileError.textContent = 'Only PDF files are allowed.';
+          pdfInput.value = ''; // Reset the input
+        } else {
+          uploadText.textContent = `Selected: ${file.name}`;
+        }
+      }
+    });
+
+    // Drag & Drop functionality
+    submissionForm.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      submissionForm.style.backgroundColor = '#eaf4fb';
+    });
+    
+    submissionForm.addEventListener('dragleave', (e) => {
+      e.preventDefault();
+      submissionForm.style.backgroundColor = '#f9f9f9';
+    });
+    
+    submissionForm.addEventListener('drop', (e) => {
+      e.preventDefault();
+      submissionForm.style.backgroundColor = '#f9f9f9';
+      fileError.textContent = '';
+      const file = e.dataTransfer.files[0];
+      if (file) {
+        if (file.size > MAX_FILE_SIZE) {
+          fileError.textContent = 'File size exceeds the 1MB limit. Please choose a smaller file.';
+        } else if (file.type !== 'application/pdf') {
+          fileError.textContent = 'Only PDF files are allowed.';
+        } else {
+          pdfInput.files = e.dataTransfer.files; // Assign dropped file to file input
+          uploadText.textContent = `Selected: ${file.name}`;
+        }
+      }
+    });
+
+    // Submission button handler (for demonstration, currently only logs a message)
+    document.getElementById('submitAssignmentBtn').addEventListener('click', () => {
+      if (!pdfInput.files[0]) {
+        alert('Please select a valid PDF file to submit.');
+      } else {
+        // If file is valid, proceed with submission (e.g., via AJAX or form submission)
+        alert('Assignment submitted successfully!');
+        // Reset the file input and upload text if needed.
+        pdfInput.value = '';
+        uploadText.textContent = 'Drag & drop your PDF here or click to select a file';
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}Smart Classroom Home{% endblock %}
+
+{% block content %}
+  <div class="welcome">
+    <h2>Welcome, <span id="usernameDisplay">Student</span>!</h2>
+    <p>Explore your courses, check announcements, and manage assignments—all in one place.</p>
+  </div>
+  
+  <div class="cards">
+    <div class="card">
+      <h3><i class="fa fa-calendar-alt"></i> Upcoming Classes</h3>
+      <p>Don't miss your next class. Check your schedule for upcoming sessions and join on time.</p>
+    </div>
+    <div class="card">
+      <h3><i class="fa fa-bullhorn"></i> Latest Announcements</h3>
+      <p>Stay updated with the latest news and notices from your instructors and institution.</p>
+    </div>
+    <div class="card">
+      <h3><i class="fa fa-tasks"></i> Assignments Due</h3>
+      <p>Review pending assignments, check deadlines, and submit your work on time.</p>
+    </div>
+    <div class="card">
+      <h3><i class="fa fa-chart-line"></i> Grade Reports</h3>
+      <p>Access your detailed grade reports and monitor your academic performance.</p>
+    </div>
+  </div>
+{% endblock %}

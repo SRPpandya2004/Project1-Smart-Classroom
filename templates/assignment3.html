@@ -1,0 +1,183 @@
+{% extends "base.html" %}
+
+{% block title %}Submit Assignment - Smart Classroom System{% endblock %}
+
+{% block content %}
+<!-- Inline CSS for this page (self-contained, since base.html isn’t updated) -->
+<style>
+  /* Normal, steady title styled as a heading */
+  .page-title {
+    font-size: 48px;            /* Standard size */
+    text-align: center;
+    margin-bottom: 20px;
+    font-weight: bold;          /* Bold for a heading look */
+    color: #2575fc;             /* Steady color */
+    /* No gradient or animation */
+  }
+  
+  .instructions {
+    font-size: 18px;
+    text-align: center;
+    color: #666;
+    margin-bottom: 40px;
+  }
+  
+  /* File Upload Area */
+  .submission-form {
+    border: 2px dashed #2575fc;
+    border-radius: 8px;
+    padding: 50px;
+    text-align: center;
+    background: #f9f9f9;
+    margin-bottom: 30px;
+    cursor: pointer;
+    transition: background-color 0.4s, transform 0.4s;
+    animation: slideIn 0.8s ease-out;
+  }
+  .submission-form:hover {
+    background-color: #eaf4fb;
+    transform: scale(1.02);
+  }
+  @keyframes slideIn {
+    from { transform: translateY(40px); opacity: 0; }
+    to   { transform: translateY(0); opacity: 1; }
+  }
+  .submission-form p {
+    font-size: 16px;
+    color: #555;
+  }
+  #fileError {
+    display: block;
+    margin-top: 10px;
+    color: red;
+    font-size: 14px;
+  }
+  
+  /* Submit Button */
+  .submit-btn {
+    display: inline-block;
+    padding: 10px 15px;
+    background: #2575fc;
+    color: #fff;
+    font-size: 16px;
+    border-radius: 4px;
+    transition: background 0.3s, transform 0.3s;
+    border: none;
+    cursor: pointer;
+  }
+  .submit-btn:hover {
+    background: #1a5bb8;
+    transform: scale(1.05);
+  }
+</style>
+
+<main class="main-content">
+  <div class="page-title">Submit Assignment</div>
+  <p class="instructions">
+    Please upload your assignment in PDF format. The maximum allowed file size is 1MB.
+  </p>
+  <!-- File Upload Area -->
+  <div class="submission-form" id="submissionForm">
+    <input type="file" id="pdfInput" accept="application/pdf" style="display: none;" />
+    <p id="uploadText">Drag & drop your PDF here or click to select a file</p>
+    <span id="fileError"></span>
+  </div>
+  <!-- Submit Button -->
+  <button class="submit-btn" id="submitAssignmentBtn">Submit Assignment</button>
+</main>
+
+<!-- Inline JavaScript for this page -->
+<script>
+  // Retrieve file upload elements and set file size limit (1MB)
+  const pdfInput = document.getElementById('pdfInput');
+  const submissionForm = document.getElementById('submissionForm');
+  const fileError = document.getElementById('fileError');
+  const uploadText = document.getElementById('uploadText');
+  const MAX_FILE_SIZE = 1048576; // 1MB in bytes
+
+  // Trigger file input when submission area is clicked
+  submissionForm.addEventListener('click', () => {
+    pdfInput.click();
+  });
+
+  // Validate file selected via file dialog
+  pdfInput.addEventListener('change', (e) => {
+    fileError.textContent = '';
+    const file = e.target.files[0];
+    if (file) {
+      if (file.size > MAX_FILE_SIZE) {
+        fileError.textContent = 'File size exceeds 1MB. Please choose a smaller file.';
+        pdfInput.value = '';
+      } else if (file.type !== 'application/pdf') {
+        fileError.textContent = 'Only PDF files are allowed.';
+        pdfInput.value = '';
+      } else {
+        uploadText.textContent = `Selected: ${file.name}`;
+      }
+    }
+  });
+
+  // Drag & Drop functionality for the file upload area
+  submissionForm.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    submissionForm.style.backgroundColor = '#eaf4fb';
+  });
+  submissionForm.addEventListener('dragleave', (e) => {
+    e.preventDefault();
+    submissionForm.style.backgroundColor = '#f9f9f9';
+  });
+  submissionForm.addEventListener('drop', (e) => {
+    e.preventDefault();
+    submissionForm.style.backgroundColor = '#f9f9f9';
+    fileError.textContent = '';
+    const file = e.dataTransfer.files[0];
+    if (file) {
+      if (file.size > MAX_FILE_SIZE) {
+        fileError.textContent = 'File size exceeds 1MB. Please choose a smaller file.';
+      } else if (file.type !== 'application/pdf') {
+        fileError.textContent = 'Only PDF files are allowed.';
+      } else {
+        pdfInput.files = e.dataTransfer.files;
+        uploadText.textContent = `Selected: ${file.name}`;
+      }
+    }
+  });
+
+  // Submit assignment using Fetch API (update endpoint URL as needed)
+  document.getElementById('submitAssignmentBtn').addEventListener('click', () => {
+    if (!pdfInput.files[0]) {
+      alert('Please select a valid PDF file to submit.');
+    } else {
+      const formData = new FormData();
+      formData.append('assignmentFile', pdfInput.files[0]);
+
+      const submitButton = document.getElementById('submitAssignmentBtn');
+      submitButton.disabled = true;
+      submitButton.textContent = 'Submitting...';
+
+      fetch('/submit-assignment', { // Update this URL as necessary
+        method: 'POST',
+        body: formData
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          alert('Assignment submitted successfully!');
+        } else {
+          alert('Submission failed: ' + data.error);
+        }
+        submitButton.disabled = false;
+        submitButton.textContent = 'Submit Assignment';
+        pdfInput.value = '';
+        uploadText.textContent = 'Drag & drop your PDF here or click to select a file';
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred during submission.');
+        submitButton.disabled = false;
+        submitButton.textContent = 'Submit Assignment';
+      });
+    }
+  });
+</script>
+{% endblock %}

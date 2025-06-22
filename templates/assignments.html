@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+
+{% block title %}
+  Assignments - Smart Classroom System
+{% endblock %}
+
+{% block sidebar %}
+<nav>
+  <ul>
+    <li><a href="#"><i class="fa fa-tachometer-alt"></i> Dashboard</a></li>
+    <li><a href="#"><i class="fa fa-book"></i> My Courses</a></li>
+    <li><a href="#"><i class="fa fa-sign-out-alt"></i> Logout</a></li>
+  </ul>
+</nav>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+  .page-title {
+    font-size: 32px;
+    margin-bottom: 20px;
+  }
+  .instructions {
+    font-size: 16px;
+    color: #666;
+    margin-bottom: 30px;
+  }
+  .assignments-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    animation: fadeIn 1.5s ease-in;
+  }
+  .assignment-card {
+    background: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+  .assignment-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  }
+  .assignment-card h3 {
+    font-size: 22px;
+    color: #2575fc;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+  }
+  .assignment-card h3 i {
+    margin-right: 8px;
+  }
+  .assignment-card p {
+    font-size: 14px;
+    color: #555;
+    line-height: 1.5;
+    margin-bottom: 15px;
+  }
+  .assignment-card .due-date {
+    font-size: 14px;
+    font-weight: bold;
+    color: #E53935;
+    margin-bottom: 15px;
+  }
+  .assignment-card .submit-btn {
+    display: inline-block;
+    padding: 10px 15px;
+    background: #2575fc;
+    color: #fff;
+    font-size: 14px;
+    border-radius: 4px;
+    transition: background 0.3s;
+  }
+  .assignment-card .submit-btn:hover {
+    background: #1a5bb8;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+  <div class="page-title">Assignments</div>
+  <p class="instructions">
+    Below you can view your current assignments. Click the "Submit Assignment" button to upload your work.
+    Please note the due dates and instructions for each task.
+  </p>
+
+  <!-- ASSIGNMENTS GRID -->
+  <div class="assignments-grid">
+    <!-- Assignment Card 1 -->
+    <div class="assignment-card">
+      <h3><i class="fa fa-file-alt"></i> Data Structures Assignment</h3>
+      <p>Solve problems related to trees, graphs, and linked lists. Ensure you provide detailed explanations for each solution.</p>
+      <div class="due-date">Due: June 10, 2025</div>
+      <a href="{% url 'upload' %}" class="submit-btn">Submit Assignment</a>
+    </div>
+    <!-- Assignment Card 2 -->
+    <div class="assignment-card">
+      <h3><i class="fa fa-file-alt"></i> Web Development Project</h3>
+      <p>Develop a dynamic website using HTML, CSS, and JavaScript frameworks. Your project should include responsive design and interactive features.</p>
+      <div class="due-date">Due: June 20, 2025</div>
+      <a href="{% url 'upload' %}" class="submit-btn">Submit Assignment</a>
+       
+    </div>
+    <!-- Assignment Card 3 -->
+    <div class="assignment-card">
+      <h3><i class="fa fa-file-alt"></i> Database Systems Report</h3>
+      <p>Write a comprehensive report on normalization techniques and SQL query optimization. Include examples from real-world applications.</p>
+      <div class="due-date">Due: June 15, 2025</div>
+      <a href="{% url 'upload' %}" class="submit-btn">Submit Assignment</a>
+    </div>
+  </div>
+{% endblock %}

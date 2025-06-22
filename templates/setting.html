@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Settings - Smart Classroom System</title>
+  <!-- Google Fonts -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,700">
+  <!-- Font Awesome for Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+  <style>
+    /* RESET & GLOBAL STYLES */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: #f4f4f4;
+      color: #333;
+      overflow-x: hidden;
+    }
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+    ul {
+      list-style: none;
+    }
+
+    /* HEADER with Animated Gradient */
+    header {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      height: 80px;
+      background: linear-gradient(45deg, #6a11cb, #2575fc, #6a11cb);
+      background-size: 200% 200%;
+      animation: gradientBG 8s ease infinite;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 30px;
+      color: #fff;
+      z-index: 1100;
+    }
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    header h1 {
+      font-size: 26px;
+    }
+    /* Navigation Menu in Header */
+    .nav-menu ul {
+      display: flex;
+      align-items: center;
+    }
+    .nav-menu ul li {
+      margin: 0 15px;
+      position: relative;
+    }
+    .nav-menu ul li a {
+      font-size: 16px;
+      padding: 8px;
+      transition: color 0.3s;
+    }
+    .nav-menu ul li a:hover {
+      color: #ffeb3b;
+    }
+    .dropdown .dropbtn {
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+    }
+    .dropdown .fa-caret-down {
+      margin-left: 5px;
+    }
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      min-width: 150px;
+      background: #fff;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+      z-index: 1000;
+    }
+    .dropdown-content a {
+      display: block;
+      padding: 10px 15px;
+      color: #333;
+      transition: background 0.3s;
+    }
+    .dropdown-content a:hover {
+      background: #f0f0f0;
+    }
+    .dropdown:hover .dropdown-content {
+      display: block;
+    }
+    
+    /* MAIN LAYOUT */
+    .container {
+      display: flex;
+      margin-top: 80px; /* space for header */
+      height: calc(100vh - 80px);
+      position: relative;
+      transition: all 0.3s ease;
+    }
+    /* SIDEBAR */
+    .sidebar {
+      width: 250px;
+      background: #fff;
+      border-right: 1px solid #ddd;
+      padding: 20px;
+      overflow-y: auto;
+      transition: transform 0.3s ease;
+    }
+    .container.collapsed .sidebar {
+      transform: translateX(-260px);
+    }
+    .sidebar nav ul li {
+      margin: 15px 0;
+    }
+    .sidebar nav ul li a {
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      padding: 8px;
+      color: #333;
+      transition: background 0.3s, padding-left 0.3s;
+      border-radius: 4px;
+    }
+    .sidebar nav ul li a:hover {
+      background: #f0f0f0;
+      padding-left: 15px;
+    }
+    .sidebar nav ul li a i {
+      margin-right: 10px;
+      color: #2575fc;
+    }
+    
+    /* Sidebar Toggle Button */
+    .sidebar-toggle {
+      position: absolute;
+      top: 20px;
+      left: 250px;
+      width: 30px;
+      height: 30px;
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: left 0.3s ease;
+      z-index: 1200;
+    }
+    .container.collapsed .sidebar-toggle {
+      left: 10px;
+    }
+    
+    /* MAIN CONTENT: Settings Page */
+    .main-content {
+      flex: 1;
+      padding: 30px 40px;
+      overflow-y: auto;
+      position: relative;
+      animation: fadeIn 1s ease-in;
+      transition: margin-left 0.3s ease;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .settings-header {
+      margin-bottom: 30px;
+    }
+    .settings-header h2 {
+      font-size: 32px;
+      margin-bottom: 10px;
+    }
+    .settings-header p {
+      font-size: 16px;
+      color: #666;
+    }
+    /* Settings Form Sections */
+    .settings-section {
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+    .settings-section h3 {
+      font-size: 20px;
+      color: #2575fc;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+    }
+    .settings-section h3 i {
+      margin-right: 8px;
+    }
+    .settings-section label {
+      display: block;
+      font-size: 14px;
+      margin-bottom: 5px;
+      color: #555;
+    }
+    .settings-section input[type="text"],
+    .settings-section input[type="email"],
+    .settings-section input[type="password"],
+    .settings-section select {
+      width: 100%;
+      padding: 8px 10px;
+      font-size: 14px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      margin-bottom: 10px;
+    }
+    .settings-section .option-group {
+      margin-bottom: 10px;
+    }
+    .settings-section .option-group label {
+      margin-right: 15px;
+      font-size: 14px;
+    }
+    .save-settings-btn {
+      background: #2575fc;
+      color: #fff;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 4px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background 0.3s;
+      margin-top: 10px;
+    }
+    .save-settings-btn:hover {
+      background: #1a5bb8;
+    }
+    
+    /* RESPONSIVE ADJUSTMENTS */
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column;
+      }
+      .sidebar {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid #ddd;
+        transform: translateX(0);
+      }
+      .sidebar-toggle {
+        display: none;
+      }
+      .main-content {
+        padding: 15px 20px;
+      }
+      .nav-menu ul {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- HEADER -->
+  <header>
+    <h1>Smart Classroom System</h1>
+    <nav class="nav-menu">
+      <ul>
+        <li><a href="#">Dashboard</a></li>
+        <li><a href="#">Courses</a></li>
+        <li><a href="#">Assignments</a></li>
+        <li class="dropdown">
+          <a href="#" class="dropbtn">Profile <i class="fa fa-caret-down"></i></a>
+          <div class="dropdown-content">
+            <a href="#">View Profile</a>
+            <a href="#">Settings</a>
+            <a href="#">Logout</a>
+          </div>
+        </li>
+      </ul>
+    </nav>
+  </header>
+  
+  <!-- MAIN LAYOUT -->
+  <div class="container" id="container">
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+      <nav>
+        <ul>
+          <li><a href="#"><i class="fa fa-tachometer-alt"></i> Dashboard</a></li>
+          <li><a href="#"><i class="fa fa-book"></i> My Courses</a></li>
+          <li><a href="#"><i class="fa fa-calendar"></i> Schedule</a></li>
+          <li><a href="#"><i class="fa fa-tasks"></i> Assignments</a></li>
+          <li><a href="#"><i class="fa fa-pencil-alt"></i> Exams</a></li>
+          <li><a href="#"><i class="fa fa-folder-open"></i> Resources</a></li>
+          <li><a href="#"><i class="fa fa-cog"></i> Settings</a></li>
+          <li><a href="#"><i class="fa fa-sign-out-alt"></i> Logout</a></li>
+        </ul>
+      </nav>
+    </aside>
+    
+    <!-- Sidebar Toggle Button -->
+    <div class="sidebar-toggle" id="sidebarToggle" onclick="toggleSidebar()">
+      <i class="fa fa-angle-double-left"></i>
+    </div>
+    
+    <!-- MAIN CONTENT: Settings Page -->
+    <main class="main-content">
+      <div class="settings-header">
+        <h2>Settings</h2>
+        <p>Manage your account and app preferences.</p>
+      </div>
+      
+      <!-- SETTINGS FORM -->
+      <form id="settingsForm">
+        <!-- Account Settings Section -->
+        <div class="settings-section">
+          <h3><i class="fa fa-user-cog"></i> Account Settings</h3>
+          <label for="usernameSetting">Username</label>
+          <input type="text" id="usernameSetting" value="john_doe">
+          <label for="emailSetting">Email</label>
+          <input type="email" id="emailSetting" value="john.doe@example.com">
+          <label for="passwordSetting">Change Password</label>
+          <input type="password" id="passwordSetting" placeholder="Enter new password">
+        </div>
+        
+        <!-- Notification Preferences Section -->
+        <div class="settings-section">
+          <h3><i class="fa fa-bell"></i> Notification Preferences</h3>
+          <div class="option-group">
+            <label><input type="checkbox" id="emailNotifs" checked> Email Notifications</label>
+            <label><input type="checkbox" id="smsNotifs"> SMS Notifications</label>
+            <label><input type="checkbox" id="pushNotifs" checked> Push Notifications</label>
+          </div>
+        </div>
+        
+        <!-- Privacy Settings Section -->
+        <div class="settings-section">
+          <h3><i class="fa fa-shield-alt"></i> Privacy Settings</h3>
+          <label for="profileVisibility">Profile Visibility</label>
+          <select id="profileVisibility">
+            <option value="public" selected>Public</option>
+            <option value="private">Private</option>
+            <option value="friends">Friends Only</option>
+          </select>
+          <div class="option-group">
+            <label><input type="checkbox" id="dataSharing" checked> Enable Data Sharing</label>
+          </div>
+        </div>
+        
+        <!-- Theme Settings Section -->
+        <div class="settings-section">
+          <h3><i class="fa fa-adjust"></i> Theme Settings</h3>
+          <label for="themePreference">Select Theme</label>
+          <select id="themePreference">
+            <option value="light" selected>Light Mode</option>
+            <option value="dark">Dark Mode</option>
+          </select>
+        </div>
+        
+        <button type="button" class="save-settings-btn" id="saveSettingsBtn">Save Settings</button>
+      </form>
+    </main>
+  </div>
+  
+  <!-- FOOTER -->
+  <footer>
+    &copy; 2025 Smart Classroom System. All Rights Reserved.
+  </footer>
+  
+  <script>
+    // Sidebar toggle functionality
+    function toggleSidebar() {
+      const container = document.getElementById('container');
+      container.classList.toggle('collapsed');
+      const toggleIcon = document.getElementById('sidebarToggle').querySelector('i');
+      if (container.classList.contains('collapsed')) {
+        toggleIcon.classList.remove('fa-angle-double-left');
+        toggleIcon.classList.add('fa-angle-double-right');
+      } else {
+        toggleIcon.classList.remove('fa-angle-double-right');
+        toggleIcon.classList.add('fa-angle-double-left');
+      }
+    }
+    
+    // Example: Save settings button handler (you can connect this to AJAX calls to update your backend)
+    document.getElementById('saveSettingsBtn').addEventListener('click', () => {
+      // Collect settings values
+      const settings = {
+        username: document.getElementById('usernameSetting').value,
+        email: document.getElementById('emailSetting').value,
+        password: document.getElementById('passwordSetting').value,
+        notifications: {
+          email: document.getElementById('emailNotifs').checked,
+          sms: document.getElementById('smsNotifs').checked,
+          push: document.getElementById('pushNotifs').checked
+        },
+        privacy: {
+          profileVisibility: document.getElementById('profileVisibility').value,
+          dataSharing: document.getElementById('dataSharing').checked
+        },
+        theme: document.getElementById('themePreference').value
+      };
+      
+      // Here you can send 'settings' via an AJAX call to your server.
+      console.log('Settings to save:', settings);
+      alert('Settings saved successfully!');
+    });
+  </script>
+</body>
+</html>

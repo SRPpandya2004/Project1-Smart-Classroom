@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+
+{% block title %}
+Dashboard - Smart Classroom System
+{% endblock %}
+
+{% block extra_css %}
+<style>
+  /* Dashboard-specific styles */
+  .dashboard-header {
+    margin-bottom: 30px;
+  }
+  .dashboard-header h2 {
+    font-size: 32px;
+    margin-bottom: 10px;
+  }
+  .dashboard-header p {
+    font-size: 16px;
+    color: #666;
+  }
+  .dashboard-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    animation: fadeIn 1.5s ease-in;
+  }
+  .card {
+    background: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+  .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  }
+  .card h3 {
+    font-size: 22px;
+    color: #2575fc;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+  }
+  .card h3 i {
+    margin-right: 8px;
+  }
+  .card p {
+    font-size: 14px;
+    color: #555;
+    line-height: 1.5;
+    margin-bottom: 10px;
+  }
+  .progress {
+    background: #eee;
+    border-radius: 5px;
+    overflow: hidden;
+    margin: 10px 0;
+    height: 20px;
+  }
+  .progress-bar {
+    background: #2575fc;
+    height: 100%;
+    width: 0%;
+    transition: width 0.5s ease;
+    text-align: center;
+    color: #fff;
+    line-height: 20px;
+    font-size: 12px;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+  <div class="dashboard-header">
+    <h2>Dashboard</h2>
+    <p>Welcome, <span id="usernameDisplay">Student</span>! Here you can review your attendance, submissions, upcoming classes, announcements, and more.</p>
+  </div>
+  
+  <!-- DASHBOARD CARDS GRID -->
+  <div class="dashboard-cards">
+    <!-- Attendance Overview Card -->
+    <div class="card">
+      <h3><i class="fa fa-user-check"></i> Attendance</h3>
+      <p>Your overall attendance for the semester:</p>
+      <div class="progress">
+        <div class="progress-bar" id="attendanceBar" style="width: 92%;">92%</div>
+      </div>
+    </div>
+    <!-- Assignment Submissions Card -->
+    <div class="card">
+      <h3><i class="fa fa-file-upload"></i> Submissions</h3>
+      <p>You have submitted 4 out of 5 assignments.</p>
+    </div>
+    <!-- Upcoming Classes Card -->
+    <div class="card">
+      <h3><i class="fa fa-calendar-alt"></i> Upcoming Classes</h3>
+      <p>Today: 2 classes scheduled.<br>This week: 3 more classes.</p>
+    </div>
+    <!-- Announcements Card -->
+    <div class="card">
+      <h3><i class="fa fa-bullhorn"></i> Announcements</h3>
+      <p>No new announcements at the moment. Check back later for updates on events and reminders.</p>
+    </div>
+    <!-- Grade Summary Card -->
+    <div class="card">
+      <h3><i class="fa fa-chart-line"></i> Grade Summary</h3>
+      <p>Your current average grade is 88%.</p>
+    </div>
+    <!-- Participation Card -->
+    <div class="card">
+      <h3><i class="fa fa-users"></i> Participation</h3>
+      <p>You have actively participated in 95% of the group discussions and class activities.</p>
+    </div>
+  </div>
+{% endblock %}

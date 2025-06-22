@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Student Registration</title>
+  <!-- Google Fonts -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,700" />
+  <!-- Flatpickr CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+  <style>
+    /* Global Styles */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    html, body {
+      height: 100%;
+    }
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: #f2f2f2;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden; /* Prevents scrolling */
+    }
+    /* Main container with horizontal layout */
+    .container {
+      display: flex;
+      width: 80vw;
+      max-width: 1200px;
+      min-height: 600px;
+      background: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+    }
+    /* Left panel for title (40% of container) */
+    .left-panel {
+      background: linear-gradient(45deg, #6a11cb, #2575fc);
+      flex: 0 0 40%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .left-panel h2 {
+      font-size: 36px;
+      text-align: center;
+      color: #fff;
+      line-height: 1.2;
+    }
+    /* Right panel for form (60% of container) */
+    .right-panel {
+      flex: 0 0 60%;
+      padding: 60px 40px; /* Increased top and bottom padding */
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .right-panel form {
+      width: 100%;
+    }
+    /* Form Group Styling */
+    .form-group {
+      margin-bottom: 15px;
+    }
+    .form-group label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+      color: #333;
+    }
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      padding: 10px;
+      font-size: 15px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      transition: border 0.3s ease;
+    }
+    .form-group input:focus,
+    .form-group select:focus {
+      border-color: #2575fc;
+      outline: none;
+      box-shadow: 0 0 5px rgba(37, 117, 252, 0.5);
+    }
+    /* Horizontal grouping for Gender and DOB */
+    .horizontal-group {
+      display: flex;
+      justify-content: space-between;
+      gap: 15px;
+    }
+    .horizontal-group .form-group {
+      flex: 1;
+    }
+    /* Submit Button */
+    .btn {
+      width: 100%;
+      padding: 12px;
+      background: #2575fc;
+      border: none;
+      border-radius: 4px;
+      color: #fff;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    .btn:hover {
+      background: #1a5bb8;
+    }
+    /* Sign In Link */
+    .signin-link {
+      text-align: center;
+      margin-top: 15px;
+      font-size: 14px;
+    }
+    .signin-link a {
+      color: #2575fc;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    .signin-link a:hover {
+      text-decoration: underline;
+    }
+    /* Responsive adjustments for smaller screens */
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column;
+        width: 90%;
+        min-height: auto;
+      }
+      .left-panel,
+      .right-panel {
+        flex: 0 0 auto;
+        width: 100%;
+      }
+      .right-panel {
+        padding: 20px;
+      }
+      .horizontal-group {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Left Panel: Form Title -->
+    <div class="left-panel">
+      <h2>Student Registration</h2>
+    </div>
+    <!-- Right Panel: Registration Form -->
+    <div class="right-panel">
+      <form id="studentRegistrationForm">
+        <!-- Full Name -->
+        <div class="form-group">
+          <label for="name">Full Name</label>
+          <input type="text" id="name" placeholder="Enter your full name" required />
+        </div>
+        <!-- Horizontal group for Gender and Date of Birth -->
+        <div class="horizontal-group">
+          <!-- Gender Dropdown -->
+          <div class="form-group">
+            <label for="gender">Gender</label>
+            <select id="gender" required>
+              <option value="" disabled selected>Select your gender</option>
+              <option value="male">Male</option>
+              <option value="female">Female</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          <!-- Date of Birth using Flatpickr -->
+          <div class="form-group">
+            <label for="dob">Date of Birth</label>
+            <input type="text" id="dob" placeholder="Select your date of birth" required />
+          </div>
+        </div>
+        <!-- Enrollment Number -->
+        <div class="form-group">
+          <label for="enrollment">Enrollment Number</label>
+          <input type="text" id="enrollment" placeholder="Enter enrollment number" required />
+        </div>
+        <!-- Mobile Number -->
+        <div class="form-group">
+          <label for="mobile">Mobile Number</label>
+          <input type="tel" id="mobile" placeholder="Enter your mobile number" required />
+        </div>
+        <!-- Email Address -->
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <input type="email" id="email" placeholder="Enter your email address" required />
+        </div>
+        <!-- Set Password -->
+        <div class="form-group">
+          <label for="password">Set Password</label>
+          <input type="password" id="password" placeholder="Choose a secure password" required />
+        </div>
+        <!-- Submit Button -->
+        <button type="submit" class="btn">Submit</button>
+      </form>
+      <!-- Sign In Link -->
+      <div class="signin-link">
+        <p>Already registered? <a href="signin.html">Sign In</a></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Flatpickr JS -->
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  <script>
+    // Initialize Flatpickr on the date of birth field
+    flatpickr("#dob", {
+      dateFormat: "Y-m-d",
+      maxDate: "today"
+    });
+
+    document.getElementById("studentRegistrationForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      // Collect form data
+      const userData = {
+        name: document.getElementById("name").value,
+        gender: document.getElementById("gender").value,
+        dob: document.getElementById("dob").value,
+        enrollment: document.getElementById("enrollment").value,
+        mobile: document.getElementById("mobile").value,
+        email: document.getElementById("email").value,
+        password: document.getElementById("password").value,
+      };
+      console.log("Registration Data:", userData);
+      alert("Registration successful!");
+      // Optionally redirect after registration:
+      // window.location.href = "student_signin.html";
+    });
+  </script>
+</body>
+</html>

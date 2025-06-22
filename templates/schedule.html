@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Schedule - Smart Classroom System</title>
+  <!-- Google Fonts -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,700">
+  <!-- Font Awesome for Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" crossorigin="anonymous"/>
+  <style>
+    /* CSS Variables for Theme (light by default) */
+    :root {
+      --bg-color: #f4f4f4;
+      --text-color: #333;
+      --header-bg: linear-gradient(45deg, #6a11cb, #2575fc, #6a11cb);
+      --sidebar-bg: #ffffff;
+      --card-bg: #ffffff;
+      --button-bg: #2575fc;
+      --accent-color: #ffeb3b;
+      --border-color: #ddd;
+      --shadow-color: rgba(0, 0, 0, 0.1);
+    }
+    /* (You can have a separate .dark-theme class as needed) */
+    
+    /* Global Reset & Styling */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: var(--bg-color);
+      color: var(--text-color);
+      transition: background 0.3s, color 0.3s;
+      overflow-x: hidden;
+    }
+    
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+    
+    ul {
+      list-style: none;
+    }
+    
+    /* HEADER */
+    header {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      height: 80px;
+      background: var(--header-bg);
+      background-size: 200% 200%;
+      animation: gradientBG 8s ease infinite;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 30px;
+      color: #fff;
+      z-index: 1100;
+      border-bottom: 1px solid var(--border-color);
+    }
+    
+    @keyframes gradientBG {
+      0%   { background-position: 0% 50%; }
+      50%  { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    
+    header h1 {
+      font-size: 26px;
+    }
+    
+    .nav-menu ul {
+      display: flex;
+      align-items: center;
+    }
+    
+    .nav-menu ul li {
+      margin: 0 15px;
+      position: relative;
+    }
+    
+    .nav-menu ul li a {
+      font-size: 16px;
+      padding: 8px;
+      transition: color 0.3s;
+    }
+    
+    .nav-menu ul li a:hover {
+      color: var(--accent-color);
+    }
+    
+    .dropdown .dropbtn {
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+    }
+    
+    .dropdown .fa-caret-down {
+      margin-left: 5px;
+    }
+    
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      min-width: 150px;
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      box-shadow: 0 2px 8px var(--shadow-color);
+      z-index: 1000;
+    }
+    
+    .dropdown-content a {
+      display: block;
+      padding: 10px 15px;
+      color: var(--text-color);
+      transition: background 0.3s;
+    }
+    
+    .dropdown-content a:hover {
+      background: var(--accent-color);
+      color: #fff;
+    }
+    
+    .dropdown:hover .dropdown-content {
+      display: block;
+    }
+    
+    /* MAIN LAYOUT */
+    .container {
+      display: flex;
+      margin-top: 80px; /* space for fixed header */
+      height: calc(100vh - 80px);
+      transition: all 0.3s ease;
+      position: relative;
+    }
+    
+    /* SIDEBAR */
+    .sidebar {
+      width: 250px;
+      background: var(--sidebar-bg);
+      border-right: 1px solid var(--border-color);
+      padding: 20px;
+      overflow-y: auto;
+      transition: transform 0.3s ease;
+      box-shadow: 2px 0 8px var(--shadow-color);
+    }
+    
+    .container.collapsed .sidebar {
+      transform: translateX(-260px);
+    }
+    
+    .sidebar nav ul li {
+      margin: 15px 0;
+    }
+    
+    .sidebar nav ul li a {
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      padding: 8px;
+      color: var(--text-color);
+      transition: background 0.3s, padding-left 0.3s;
+      border-radius: 4px;
+    }
+    
+    .sidebar nav ul li a:hover {
+      background: var(--accent-color);
+      padding-left: 15px;
+      color: #fff;
+    }
+    
+    .sidebar nav ul li a i {
+      margin-right: 10px;
+      color: var(--button-bg);
+    }
+    
+    /* Sidebar Toggle Button */
+    .sidebar-toggle {
+      position: absolute;
+      top: 20px;
+      left: 250px;
+      width: 30px;
+      height: 30px;
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: left 0.3s ease;
+      z-index: 1200;
+    }
+    
+    .container.collapsed .sidebar-toggle {
+      left: 10px;
+    }
+    
+    /* MAIN CONTENT (Schedule Page) */
+    .main-content {
+      flex: 1;
+      padding: 30px 40px;
+      background: var(--card-bg);
+      overflow-y: auto;
+      transition: margin-left 0.3s ease;
+      box-shadow: inset 0 0 10px var(--shadow-color);
+    }
+    
+    /* SCHEDULE PAGE CONTENT */
+    .schedule-header {
+      margin-bottom: 20px;
+    }
+    
+    .schedule-header h2 {
+      font-size: 32px;
+      margin-bottom: 10px;
+    }
+    
+    /* Day Tabs */
+    .day-tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    
+    .day-tab {
+      padding: 8px 16px;
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    
+    .day-tab.active, 
+    .day-tab:hover {
+      background: var(--button-bg);
+      color: #fff;
+    }
+    
+    /* Schedule Events Grid */
+    .schedule-events {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+    
+    .schedule-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 15px;
+      box-shadow: 0 2px 8px var(--shadow-color);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    
+    .schedule-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 4px 12px var(--shadow-color);
+    }
+    
+    .schedule-card h3 {
+      font-size: 18px;
+      color: var(--button-bg);
+      margin-bottom: 5px;
+      display: flex;
+      align-items: center;
+    }
+    
+    .schedule-card h3 i {
+      margin-right: 8px;
+    }
+    
+    .schedule-card p {
+      font-size: 14px;
+      margin-top: 5px;
+    }
+    
+    /* FOOTER */
+    footer {
+      background: var(--card-bg);
+      text-align: center;
+      padding: 15px;
+      border-top: 1px solid var(--border-color);
+    }
+    
+    /* Responsive Adjustments */
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column;
+      }
+      .sidebar {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid var(--border-color);
+        transform: translateX(0);
+      }
+      .sidebar-toggle {
+        display: none;
+      }
+      .main-content {
+        padding: 15px 20px;
+      }
+      .nav-menu ul {
+        flex-direction: column;
+      }
+      .day-tabs {
+        flex-wrap: wrap;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- HEADER -->
+  <header>
+    <h1>Smart Classroom System</h1>
+    <nav class="nav-menu">
+      <ul>
+        <li><a href="#">Dashboard</a></li>
+        <li><a href="#">Courses</a></li>
+        <li><a href="#">Assignments</a></li>
+        <li class="dropdown">
+          <a href="#" class="dropbtn">Profile <i class="fa fa-caret-down"></i></a>
+          <div class="dropdown-content">
+            <a href="#">View Profile</a>
+            <a href="#">Settings</a>
+            <a href="#">Logout</a>
+          </div>
+        </li>
+      </ul>
+    </nav>
+  </header>
+  
+  <!-- MAIN LAYOUT -->
+  <div class="container" id="container">
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+      <nav>
+        <ul>
+          <li><a href="#"><i class="fa fa-tachometer-alt"></i> Dashboard</a></li>
+          <li><a href="#"><i class="fa fa-book"></i> My Courses</a></li>
+          <li><a href="#"><i class="fa fa-calendar"></i> Schedule</a></li>
+          <li><a href="#"><i class="fa fa-tasks"></i> Assignments</a></li>
+          <li><a href="#"><i class="fa fa-pencil-alt"></i> Exams</a></li>
+          <li><a href="#"><i class="fa fa-folder-open"></i> Resources</a></li>
+          <li><a href="#"><i class="fa fa-cog"></i> Settings</a></li>
+          <li><a href="#"><i class="fa fa-sign-out-alt"></i> Logout</a></li>
+        </ul>
+      </nav>
+    </aside>
+    
+    <!-- Sidebar Toggle Button -->
+    <div class="sidebar-toggle" id="sidebarToggle" onclick="toggleSidebar()">
+      <i class="fa fa-angle-double-left"></i>
+    </div>
+    
+    <!-- MAIN CONTENT: Schedule Page -->
+    <main class="main-content">
+      <div class="schedule-header">
+        <h2>Schedule</h2>
+        <p>Select a day to view your classes.</p>
+        <!-- Day Tabs -->
+        <div class="day-tabs" id="dayTabs">
+          <button class="day-tab active" data-day="Monday">Monday</button>
+          <button class="day-tab" data-day="Tuesday">Tuesday</button>
+          <button class="day-tab" data-day="Wednesday">Wednesday</button>
+          <button class="day-tab" data-day="Thursday">Thursday</button>
+          <button class="day-tab" data-day="Friday">Friday</button>
+        </div>
+      </div>
+      
+      <!-- Schedule Events Container -->
+      <div class="schedule-events" id="scheduleEvents">
+        <!-- Schedule event cards will be populated here -->
+      </div>
+    </main>
+  </div>
+  
+  <!-- FOOTER -->
+  <footer>
+    &copy; 2025 Smart Classroom System. All Rights Reserved.
+  </footer>
+  
+  <script>
+    // Sidebar toggle functionality
+    function toggleSidebar() {
+      const container = document.getElementById('container');
+      container.classList.toggle('collapsed');
+      const toggleIcon = document.getElementById('sidebarToggle').querySelector('i');
+      if (container.classList.contains('collapsed')) {
+        toggleIcon.classList.remove('fa-angle-double-left');
+        toggleIcon.classList.add('fa-angle-double-right');
+      } else {
+        toggleIcon.classList.remove('fa-angle-double-right');
+        toggleIcon.classList.add('fa-angle-double-left');
+      }
+    }
+    
+    // Sample schedule data for each day
+    const scheduleData = {
+      "Monday": [
+        { time: "09:00 - 10:30 AM", title: "Mathematics", location: "Room 101" },
+        { time: "11:00 - 12:30 PM", title: "Physics", location: "Room 102" },
+        { time: "02:00 - 03:30 PM", title: "Computer Science", location: "Room 103" }
+      ],
+      "Tuesday": [
+        { time: "10:00 - 11:30 AM", title: "Chemistry", location: "Lab 1" },
+        { time: "01:00 - 02:30 PM", title: "History", location: "Room 201" }
+      ],
+      "Wednesday": [
+        { time: "08:30 - 10:00 AM", title: "Biology", location: "Room 104" },
+        { time: "10:30 - 12:00 PM", title: "English Literature", location: "Room 205" },
+        { time: "01:00 - 02:30 PM", title: "Art", location: "Art Studio" }
+      ],
+      "Thursday": [
+        { time: "09:00 - 10:30 AM", title: "Economics", location: "Room 110" },
+        { time: "11:00 - 12:30 PM", title: "Philosophy", location: "Room 112" }
+      ],
+      "Friday": [
+        { time: "08:00 - 09:30 AM", title: "Physical Education", location: "Gym" },
+        { time: "10:00 - 11:30 AM", title: "Music", location: "Music Room" },
+        { time: "01:00 - 02:30 PM", title: "Computer Lab", location: "Lab 2" }
+      ]
+    };
+    
+    // Function to update the schedule events container based on selected day
+    function updateSchedule(day) {
+      const eventsContainer = document.getElementById('scheduleEvents');
+      eventsContainer.innerHTML = '';
+      const events = scheduleData[day] || [];
+      
+      if (events.length === 0) {
+        eventsContainer.innerHTML = '<p>No scheduled classes for this day.</p>';
+      } else {
+        events.forEach(event => {
+          const card = document.createElement('div');
+          card.className = 'schedule-card';
+          card.innerHTML = `
+            <h3><i class="fa fa-clock"></i> ${event.time}</h3>
+            <p><strong>${event.title}</strong></p>
+            <p>Location: ${event.location}</p>
+          `;
+          eventsContainer.appendChild(card);
+        });
+      }
+    }
+    
+    // Set up day tab click handlers
+    const dayTabs = document.querySelectorAll('.day-tab');
+    dayTabs.forEach(tab => {
+      tab.addEventListener('click', function() {
+        // Remove active class from all tabs
+        dayTabs.forEach(btn => btn.classList.remove('active'));
+        // Set this tab as active
+        this.classList.add('active');
+        // Update schedule based on the selected day
+        const selectedDay = this.getAttribute('data-day');
+        updateSchedule(selectedDay);
+      });
+    });
+    
+    // Initialize by displaying Monday's schedule
+    updateSchedule("Monday");
+  </script>
+</body>
+</html>

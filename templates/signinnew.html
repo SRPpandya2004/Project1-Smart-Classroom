@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Student Login</title>
+  <!-- Google Fonts -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,700" />
+  <link rel="stylesheet" href="static\registration_signin.css">
+  
+</head>
+<body>
+  <div class="container">
+    <!-- Left Panel: Title -->
+    <div class="left-panel">
+      <h2>Student Login</h2>
+    </div>
+    <!-- Right Panel: Login Form -->
+    <div class="right-panel">
+      <form id="studentLoginForm">
+        <!-- Username field: Graduation enrollment number -->
+        <div class="form-group">
+          <label for="username">Enrollment Number</label>
+          <input type="text" id="username" placeholder="Enter your enrollment number" required />
+        </div>
+        <!-- Password field -->
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" placeholder="Enter your password" required />
+        </div>
+        <!-- Submit Button -->
+        <button type="submit" class="btn">Sign In</button>
+      </form>
+      <!-- Sign Up Link -->
+      <div class="signup-link">
+        <p>Not registered? <a href="login.html">Register Here</a></p>
+      </div>
+    </div>
+  </div>
+  <!-- Include Flatpickr from the CDN -->
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="static\registration_signin.js"></script>
+</body>
+</html>

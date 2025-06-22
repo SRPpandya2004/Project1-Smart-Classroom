@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Smart Classroom Home{% endblock %}</title>
+  
+  <!-- Google Fonts -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,700">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+  
+  <style>
+    /* Reset / Global Styles */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { 
+      font-family: 'Roboto', sans-serif; 
+      background: #f4f4f4; 
+      color: #333; 
+      overflow-x: hidden; 
+    }
+    a { text-decoration: none; color: inherit; }
+    ul { list-style: none; }
+    
+    /* HEADER with animated gradient */
+    header {
+      width: 100%;
+      height: 80px;
+      background: linear-gradient(45deg, #6a11cb, #2575fc, #6a11cb);
+      background-size: 200% 200%;
+      animation: gradientBG 8s ease infinite;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 30px;
+      color: #fff;
+    }
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    header h1 { font-size: 26px; }
+    
+    /* Header Navigation and Dropdown */
+    .nav-menu ul {
+      display: flex;
+      align-items: center;
+    }
+    .nav-menu ul li { margin: 0 15px; position: relative; }
+    .nav-menu ul li a { font-size: 16px; padding: 8px; transition: color 0.3s; }
+    .nav-menu ul li a:hover { color: #ffeb3b; }
+    .dropdown .dropbtn { cursor: pointer; display: flex; align-items: center; }
+    .dropdown .fa-caret-down { margin-left: 5px; }
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      min-width: 150px;
+      background: #fff;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+      z-index: 1000;
+    }
+    .dropdown-content a {
+      display: block;
+      padding: 10px 15px;
+      color: #333;
+      transition: background-color 0.3s;
+    }
+    .dropdown-content a:hover { background-color: #f0f0f0; }
+    .dropdown:hover .dropdown-content { display: block; }
+    
+    /* MAIN LAYOUT: sidebar + main content */
+    .container { display: flex; height: calc(100vh - 80px); }
+    
+    /* Sidebar */
+    .sidebar {
+      width: 250px;
+      background: #fff;
+      border-right: 1px solid #ddd;
+      padding: 20px;
+      overflow-y: auto;
+    }
+    .sidebar nav ul li { margin: 15px 0; }
+    .sidebar nav ul li a {
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      padding: 8px;
+      color: #333;
+      transition: background-color 0.3s, padding-left 0.3s;
+      border-radius: 4px;
+    }
+    .sidebar nav ul li a:hover { 
+      background-color: #f0f0f0; 
+      padding-left: 15px; 
+    }
+    .sidebar nav ul li a i { margin-right: 10px; color: #2575fc; }
+    
+    /* Main Content */
+    .main-content {
+      flex: 1;
+      padding: 30px 40px;
+      overflow-y: auto;
+      position: relative;
+      animation: fadeIn 1s ease-in;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    /* Footer */
+    footer {
+      background: #fff;
+      text-align: center;
+      padding: 15px;
+      border-top: 1px solid #ddd;
+    }
+    
+   
+  </style>
+  {% block extra_css %}{% endblock %}
+</head>
+<body>
+  <!-- HEADER -->
+  <header>
+    <h1>Smart Classroom System</h1>
+    <nav class="nav-menu">
+      <ul>
+        <!-- Use Django URL names for navigation links -->
+        <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
+        <li><a href="#">Courses</a></li>
+        <li><a href="#">Announcements</a></li>
+        <li class="dropdown">
+          <a href="#" class="dropbtn">Profile <i class="fa fa-caret-down"></i></a>
+          <div class="dropdown-content">
+            <a href="{% url 'profile' %}">View Profile</a>
+            <a href="{% url 'settings' %}">Settings</a>
+            <a href="/logout">Logout</a>
+          </div>
+        </li>
+      </ul>
+    </nav>
+  </header>
+  
+  <!-- MAIN LAYOUT -->
+  <div class="container">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <nav>
+        <ul>
+          <li><a href="{% url 'dashboard' %}"><i class="fa fa-tachometer-alt"></i> Dashboard</a></li>
+          <li><a href="#"><i class="fa fa-book"></i> My Courses</a></li>
+          <li><a href="/schedule"><i class="fa fa-calendar"></i> Schedule</a></li>
+          <li><a href="{% url 'assignments' %}"><i class="fa fa-tasks"></i> Assignments</a></li>
+          <li><a href="/exams"><i class="fa fa-pencil-alt"></i> Exams</a></li>
+          <li><a href="/resources"><i class="fa fa-folder-open"></i> Resources</a></li>
+          <li><a href="{% url 'settings' %}"><i class="fa fa-cog"></i> Settings</a></li>
+          <li><a href="/logout"><i class="fa fa-sign-out-alt"></i> Logout</a></li>
+        </ul>
+      </nav>
+    </aside>
+    
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+      {% block content %}{% endblock %}
+    </main>
+  </div>
+  
+  <!-- FOOTER -->
+  <footer>
+    &copy; 2025 Smart Classroom System. All Rights Reserved.
+  </footer>
+  
+  <script>
+    // Example: update username if element exists.
+    const username = localStorage.getItem('username') || 'Student';
+    if (document.getElementById('usernameDisplay')) {
+      document.getElementById('usernameDisplay').textContent = username;
+    }
+  </script>
+  {% block extra_js %}{% endblock %}
+</body>
+</html>

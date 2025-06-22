@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>School Management System</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- Header with Branding and Navigation -->
+  <header>
+    <div class="header-left">
+      <h1>Smart Classroom System</h1>
+    </div>
+    <nav class="header-nav">
+      <ul>
+        <li><a href="#">Home</a></li>
+        <li class="dropdown">
+          <a href="#" class="dropbtn">Profile</a>
+          <div class="dropdown-content">
+            <a href="#">Assignment Submission</a>
+            <a href="#">Update Profile</a>
+            <a href="#">Settings</a>
+          </div>
+        </li>
+        <li><a href="#">Logout</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Main Section -->
+  <main>
+    <div class="container">
+      <section class="student-info">
+        <h2>Welcome, <span id="studentName">John Doe</span></h2>
+      </section>
+      
+      <section class="attendance-block">
+        <h3>Attendance</h3>
+        <div class="attendance-card">
+          <p>Present: <span>90%</span></p>
+          <p>Absent: <span>10%</span></p>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- JavaScript File -->
+  <script src="script.js"></script>
+</body>
+</html>

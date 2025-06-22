@@ -1,0 +1,249 @@
+{% extends "base.html" %}
+
+{% block title %}
+Settings - Smart Classroom System
+{% endblock %}
+
+{% block extra_css %}
+<style>
+  /* Container wrapper for settings page */
+  .settings-wrapper {
+    max-width: 900px;
+    margin: 50px auto;
+    padding: 40px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    animation: fadeInUp 0.6s ease-out;
+  }
+  @keyframes fadeInUp {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+  
+  /* Common styling for each settings section card */
+  .settings-section {
+    margin-bottom: 30px;
+    padding: 15px 20px;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    background: #fafafa;
+    animation: fadeIn 0.5s ease-out;
+  }
+  .settings-section h3 {
+    font-size: 20px;
+    margin-bottom: 15px;
+    color: #2575fc;
+  }
+  .settings-section label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 14px;
+    color: #555;
+  }
+  .settings-section input[type="text"],
+  .settings-section input[type="email"],
+  .settings-section input[type="password"],
+  .settings-section select {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  .change-pwd-btn,
+  .save-pwd-btn,
+  .save-settings-btn {
+    background: #2575fc;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 15px;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  .change-pwd-btn:hover,
+  .save-pwd-btn:hover,
+  .save-settings-btn:hover {
+    background: #1a5bb8;
+  }
+  #changePasswordSection {
+    display: none;
+    margin-top: 10px;
+  }
+  .option-group label {
+    font-size: 14px;
+    margin-right: 15px;
+    color: #555;
+  }
+  
+  /* Dark Theme Overrides */
+  body.dark-theme {
+    background: #222;
+    color: #eee;
+  }
+  body.dark-theme .settings-wrapper {
+    background: #333;
+    color: #eee;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+  }
+  body.dark-theme .settings-section {
+    background: #444;
+    border-color: #555;
+  }
+  body.dark-theme .settings-section label {
+    color: #ccc;
+  }
+  body.dark-theme input,
+  body.dark-theme select {
+    background: #555;
+    border: 1px solid #666;
+    color: #eee;
+  }
+  body.dark-theme .change-pwd-btn,
+  body.dark-theme .save-pwd-btn,
+  body.dark-theme .save-settings-btn {
+    background: #68a0cf;
+  }
+  body.dark-theme .change-pwd-btn:hover,
+  body.dark-theme .save-pwd-btn:hover,
+  body.dark-theme .save-settings-btn:hover {
+    background: #5290b3;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="settings-wrapper">
+  <form id="settingsForm">
+  
+    <!-- Account Settings Section -->
+    <div class="settings-section">
+      <h3><i class="fa fa-user-cog"></i> Account Settings</h3>
+      <label for="usernameSetting">Username</label>
+      <input type="text" id="usernameSetting" value="john_doe">
+      
+      <label for="emailSetting">Email</label>
+      <input type="email" id="emailSetting" value="john.doe@example.com">
+      
+      <!-- Change Password Button -->
+      <button type="button" class="change-pwd-btn" id="changePwdBtn">Change Password</button>
+      
+      <!-- Hidden Change Password Section -->
+      <div id="changePasswordSection">
+        <label for="newPassword">New Password</label>
+        <input type="password" id="newPassword" placeholder="Enter new password">
+        
+        <label for="confirmPassword">Confirm Password</label>
+        <input type="password" id="confirmPassword" placeholder="Confirm new password">
+        
+        <button type="button" class="save-pwd-btn" id="savePwdBtn">Save Password</button>
+      </div>
+    </div>
+    
+    <!-- Notification Preferences Section -->
+    <div class="settings-section">
+      <h3><i class="fa fa-bell"></i> Notification Preferences</h3>
+      <div class="option-group">
+        <label><input type="checkbox" id="emailNotifs" checked> Email Notifications</label>
+        <label><input type="checkbox" id="smsNotifs"> SMS Notifications</label>
+        <label><input type="checkbox" id="pushNotifs" checked> Push Notifications</label>
+      </div>
+    </div>
+    
+    <!-- Privacy Settings Section -->
+    <div class="settings-section">
+      <h3><i class="fa fa-shield-alt"></i> Privacy Settings</h3>
+      <label for="profileVisibility">Profile Visibility</label>
+      <select id="profileVisibility">
+        <option value="public" selected>Public</option>
+        <option value="private">Private</option>
+        <option value="friends">Friends Only</option>
+      </select>
+      <div class="option-group">
+        <label><input type="checkbox" id="dataSharing" checked> Enable Data Sharing</label>
+      </div>
+    </div>
+    
+    <!-- Theme Settings Section -->
+    <div class="settings-section">
+      <h3><i class="fa fa-adjust"></i> Theme Settings</h3>
+      <label for="themePreference">Select Theme</label>
+      <select id="themePreference">
+        <option value="light" selected>Light Mode</option>
+        <option value="dark">Dark Mode</option>
+      </select>
+    </div>
+    
+    <button type="button" class="save-settings-btn" id="saveSettingsBtn">Save Settings</button>
+  </form>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  // Handle Dark/Light Theme Preference
+  const themePreference = document.getElementById('themePreference');
+  if (localStorage.getItem('theme') === 'dark') {
+    document.body.classList.add('dark-theme');
+    themePreference.value = 'dark';
+  } else {
+    document.body.classList.remove('dark-theme');
+    themePreference.value = 'light';
+  }
+  themePreference.addEventListener('change', function() {
+    if (this.value === 'dark') {
+      document.body.classList.add('dark-theme');
+      localStorage.setItem('theme', 'dark');
+    } else {
+      document.body.classList.remove('dark-theme');
+      localStorage.setItem('theme', 'light');
+    }
+  });
+  
+  // Toggle Change Password Section
+  const changePwdBtn = document.getElementById('changePwdBtn');
+  const changePasswordSection = document.getElementById('changePasswordSection');
+  const savePwdBtn = document.getElementById('savePwdBtn');
+  
+  changePwdBtn.addEventListener('click', function() {
+    if (changePasswordSection.style.display === 'block') {
+      changePasswordSection.style.display = 'none';
+      changePwdBtn.textContent = 'Change Password';
+    } else {
+      changePasswordSection.style.display = 'block';
+      changePwdBtn.textContent = 'Cancel';
+    }
+  });
+  
+  savePwdBtn.addEventListener('click', function() {
+    const newPassword = document.getElementById('newPassword').value;
+    const confirmPassword = document.getElementById('confirmPassword').value;
+    if (newPassword && newPassword === confirmPassword) {
+      alert('Password changed successfully!');
+      changePasswordSection.style.display = 'none';
+      changePwdBtn.textContent = 'Change Password';
+    } else {
+      alert('Passwords do not match or are empty!');
+    }
+  });
+  
+  // Save Settings Button (example)
+  const saveSettingsBtn = document.getElementById('saveSettingsBtn');
+  saveSettingsBtn.addEventListener('click', function() {
+    const settings = {
+      username: document.getElementById('usernameSetting').value,
+      email: document.getElementById('emailSetting').value,
+      emailNotifs: document.getElementById('emailNotifs').checked,
+      smsNotifs: document.getElementById('smsNotifs').checked,
+      pushNotifs: document.getElementById('pushNotifs').checked,
+      profileVisibility: document.getElementById('profileVisibility').value,
+      dataSharing: document.getElementById('dataSharing').checked,
+      theme: document.getElementById('themePreference').value
+    };
+    console.log('Settings saved:', settings);
+    alert('Settings have been saved!');
+  });
+</script>
+{% endblock %}

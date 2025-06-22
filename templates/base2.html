@@ -1,0 +1,106 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{% block title %}Smart Classroom Portal{% endblock %}</title>
+  
+  <!-- Example: Include Font Awesome from static (or CDN) -->
+  <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}" />
+  
+  <!-- Common CSS for Authentication Pages -->
+  <style>
+    /* Global Reset */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; }
+    body { 
+      font-family: 'Roboto', sans-serif; 
+      background: #f2f2f2;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+    
+    /* Animation Keyframes */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    
+    /* Main Container */
+    .container {
+      display: flex;
+      flex-direction: row;
+      width: 90%;
+      max-width: 1200px;
+      min-height: 600px;
+      background: #ffffff;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+      animation: fadeIn 1s ease-out;
+    }
+    
+    /* Left Panel */
+    .left-panel {
+      flex: 1;
+      background: linear-gradient(45deg, #6a11cb, #2575fc);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      color: #fff;
+      animation: fadeIn 1s ease-out;
+    }
+    .left-panel h2 {
+      font-size: 3rem;
+      text-align: center;
+      line-height: 1.2;
+    }
+    
+    /* Right Panel (Form Container) */
+    .right-panel {
+      flex: 1.2;
+      padding: 2.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      animation: fadeIn 1s ease-out;
+    }
+    
+    /* Responsive Adjustments */
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column;
+        width: 100%;
+        min-height: auto;
+      }
+      .left-panel, .right-panel {
+        width: 100%;
+      }
+      .left-panel { padding: 1rem; }
+      .right-panel { padding: 1.5rem; }
+    }
+  </style>
+  
+  {% block extra_css %}{% endblock %}
+</head>
+<body>
+  <div class="container">
+    <!-- Left Panel: can be overridden by child templates if needed -->
+    <div class="left-panel">
+      {% block left_panel %}
+      <h2>Welcome to Smart Classroom Portal</h2>
+      {% endblock %}
+    </div>
+    <!-- Right Panel: main content injected here -->
+    <div class="right-panel">
+      {% block content %}{% endblock %}
+    </div>
+  </div>
+  
+  {% block extra_js %}{% endblock %}
+</body>
+</html>

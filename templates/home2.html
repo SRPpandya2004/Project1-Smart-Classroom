@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Smart Classroom Home</title>
+  <!-- Google Fonts -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,700">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+  <style>
+    /* Reset / Global Styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: #f4f4f4;
+      color: #333;
+      overflow-x: hidden;
+    }
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+    ul {
+      list-style: none;
+    }
+    
+    /* Header with animated gradient */
+    header {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      height: 80px;
+      background: linear-gradient(45deg, #6a11cb, #2575fc, #6a11cb);
+      background-size: 200% 200%;
+      animation: gradientBG 8s ease infinite;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 30px;
+      color: #fff;
+      z-index: 1100;
+    }
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    header h1 {
+      font-size: 26px;
+    }
+    /* Header Navigation and Dropdown */
+    .nav-menu ul {
+      display: flex;
+      align-items: center;
+    }
+    .nav-menu ul li {
+      margin: 0 15px;
+      position: relative;
+    }
+    .nav-menu ul li a {
+      font-size: 16px;
+      padding: 8px;
+      transition: color 0.3s;
+    }
+    .nav-menu ul li a:hover {
+      color: #ffeb3b;
+    }
+    /* Dropdown styles */
+    .dropdown .dropbtn {
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+    }
+    .dropdown .fa-caret-down {
+      margin-left: 5px;
+    }
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      min-width: 150px;
+      background: #fff;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+      z-index: 1000;
+    }
+    .dropdown-content a {
+      display: block;
+      padding: 10px 15px;
+      color: #333;
+      transition: background 0.3s;
+    }
+    .dropdown-content a:hover {
+      background: #f0f0f0;
+    }
+    .dropdown:hover .dropdown-content {
+      display: block;
+    }
+    
+    /* Main Layout */
+    .container {
+      display: flex;
+      margin-top: 80px; /* space for fixed header */
+      height: calc(100vh - 80px);
+      position: relative;
+      transition: all 0.3s ease;
+    }
+    /* Sidebar */
+    .sidebar {
+      width: 250px;
+      background: #fff;
+      border-right: 1px solid #ddd;
+      padding: 20px;
+      overflow-y: auto;
+      transition: transform 0.3s ease;
+    }
+    /* When container has class "collapsed", slide the sidebar out */
+    .container.collapsed .sidebar {
+      transform: translateX(-260px);
+    }
+    
+    .sidebar nav ul li {
+      margin: 15px 0;
+    }
+    .sidebar nav ul li a {
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      padding: 8px;
+      color: #333;
+      transition: background 0.3s, padding-left 0.3s;
+      border-radius: 4px;
+    }
+    .sidebar nav ul li a:hover {
+      background: #f0f0f0;
+      padding-left: 15px;
+    }
+    .sidebar nav ul li a i {
+      margin-right: 10px;
+      color: #2575fc;
+    }
+    
+    /* Sidebar Toggle Button */
+    .sidebar-toggle {
+      position: absolute;
+      top: 20px;
+      left: 250px; /* initially at the edge of the sidebar */
+      width: 30px;
+      height: 30px;
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: left 0.3s ease;
+      z-index: 1200;
+    }
+    /* When the container is collapsed, move the toggle button closer to the left edge */
+    .container.collapsed .sidebar-toggle {
+      left: 10px;
+    }
+    
+    /* Main Content Area */
+    .main-content {
+      flex: 1;
+      padding: 30px 40px;
+      overflow-y: auto;
+      position: relative;
+      animation: fadeIn 1s ease-in;
+      transition: margin-left 0.3s ease;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .welcome {
+      margin-bottom: 30px;
+    }
+    .welcome h2 {
+      font-size: 30px;
+      margin-bottom: 10px;
+    }
+    .welcome p {
+      font-size: 16px;
+      color: #666;
+    }
+    /* Cards Grid */
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+      animation: fadeIn 1.5s ease-in;
+    }
+    .card {
+      background: #fff;
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+    .card h3 {
+      color: #2575fc;
+      font-size: 22px;
+      margin-bottom: 10px;
+    }
+    .card h3 i {
+      margin-right: 8px;
+    }
+    .card p {
+      font-size: 14px;
+      color: #555;
+      line-height: 1.5;
+    }
+    
+    /* Footer */
+    footer {
+      background: #fff;
+      text-align: center;
+      padding: 15px;
+      border-top: 1px solid #ddd;
+    }
+    
+    /* Responsive Adjustments */
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column;
+      }
+      .sidebar {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid #ddd;
+        transform: translateX(0);
+      }
+      .sidebar-toggle {
+        display: none;
+      }
+      .main-content {
+        padding: 15px 20px;
+      }
+      .nav-menu ul {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- HEADER -->
+  <header>
+    <h1>Smart Classroom System</h1>
+    <nav class="nav-menu">
+      <ul>
+        <li><a href="#">Dashboard</a></li>
+        <li><a href="#">Courses</a></li>
+        <li><a href="#">Announcements</a></li>
+        <li class="dropdown">
+          <a href="#" class="dropbtn">Profile <i class="fa fa-caret-down"></i></a>
+          <div class="dropdown-content">
+            <a href="#">View Profile</a>
+            <a href="#">Settings</a>
+            <a href="#">Logout</a>
+          </div>
+        </li>
+      </ul>
+    </nav>
+  </header>
+  
+  <!-- MAIN LAYOUT -->
+  <div class="container" id="container">
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+      <nav>
+        <ul>
+          <li><a href="#"><i class="fa fa-tachometer-alt"></i> Dashboard</a></li>
+          <li><a href="#"><i class="fa fa-book"></i> My Courses</a></li>
+          <li><a href="#"><i class="fa fa-calendar"></i> Schedule</a></li>
+          <li><a href="#"><i class="fa fa-tasks"></i> Assignments</a></li>
+          <li><a href="#"><i class="fa fa-pencil-alt"></i> Exams</a></li>
+          <li><a href="#"><i class="fa fa-folder-open"></i> Resources</a></li>
+          <li><a href="#"><i class="fa fa-cog"></i> Settings</a></li>
+          <li><a href="#"><i class="fa fa-sign-out-alt"></i> Logout</a></li>
+        </ul>
+      </nav>
+    </aside>
+    
+    <!-- Animated Sidebar Toggle Button -->
+    <div class="sidebar-toggle" id="sidebarToggle" onclick="toggleSidebar()">
+      <i class="fa fa-angle-double-left"></i>
+    </div>
+    
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+      <div class="welcome">
+        <h2>Welcome, <span id="usernameDisplay">Student</span>!</h2>
+        <p>Explore your courses, check announcements, and manage assignments—all in one place.</p>
+      </div>
+      
+      <!-- DASHBOARD CARDS -->
+      <div class="cards">
+        <div class="card">
+          <h3><i class="fa fa-calendar-alt"></i> Upcoming Classes</h3>
+          <p>Don't miss your next class. Check your schedule for upcoming sessions and join on time.</p>
+        </div>
+        <div class="card">
+          <h3><i class="fa fa-bullhorn"></i> Latest Announcements</h3>
+          <p>Stay updated with the latest news and notices from your instructors and institution.</p>
+        </div>
+        <div class="card">
+          <h3><i class="fa fa-tasks"></i> Assignments Due</h3>
+          <p>Review pending assignments, check deadlines, and submit your work on time.</p>
+        </div>
+        <div class="card">
+          <h3><i class="fa fa-chart-line"></i> Grade Reports</h3>
+          <p>Access your detailed grade reports and monitor your academic performance.</p>
+        </div>
+      </div>
+    </main>
+  </div>
+  
+  <!-- FOOTER -->
+  <footer>
+    &copy; 2025 Smart Classroom System. All Rights Reserved.
+  </footer>
+  
+  <script>
+    // Retrieve the username from local storage (or default to "Student")
+    const username = localStorage.getItem('username') || 'Student';
+    document.getElementById('usernameDisplay').textContent = username;
+
+    // Toggle the sidebar on button click
+    function toggleSidebar() {
+      const container = document.getElementById('container');
+      container.classList.toggle('collapsed');
+      const toggleIcon = document.getElementById('sidebarToggle').querySelector('i');
+      if (container.classList.contains('collapsed')) {
+        toggleIcon.classList.remove('fa-angle-double-left');
+        toggleIcon.classList.add('fa-angle-double-right');
+      } else {
+        toggleIcon.classList.remove('fa-angle-double-right');
+        toggleIcon.classList.add('fa-angle-double-left');
+      }
+    }
+  </script>
+</body>
+</html>
